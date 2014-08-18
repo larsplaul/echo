@@ -43,6 +43,8 @@ public class EchoServer {
   public static void main(String[] args) {
     int port = Integer.parseInt(properties.getProperty("port"));
     String ip = properties.getProperty("serverIp");
+    String logFile = properties.getProperty("logFile");
+    Utils.setLogFile(logFile,EchoServer.class.getName());
     Logger.getLogger(EchoServer.class.getName()).log(Level.INFO, "Sever started");
     try {
       serverSocket = new ServerSocket();
@@ -54,6 +56,8 @@ public class EchoServer {
       } while (keepRunning);
     } catch (IOException ex) {
       Logger.getLogger(EchoServer.class.getName()).log(Level.SEVERE, null, ex);
+    }finally{
+      Utils.closeLogger(EchoServer.class.getName());
     }
   }
 }
