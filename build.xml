@@ -10,6 +10,10 @@
 <project name="Echo" default="default" basedir=".">
     <description>Builds, tests, and runs the project Echo.</description>
     <import file="nbproject/build-impl.xml"/>
+    <target name="-post-compile">
+      <copy file="server.properties" todir="${dist.dir}"/> 
+    </target>
+
     <!--
 
     There exist several targets which are by default empty and which can be 
@@ -69,5 +73,5 @@
     properties which you can use, check the target you are overriding in the
     nbproject/build-impl.xml file. 
 
-    -->
+  -->
 </project>

@@ -8,6 +8,7 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import shared.ProtocolStrings;
 
 public class EchoClient
 {
@@ -32,13 +33,13 @@ public class EchoClient
   }
   
   public void stop() throws IOException{
-    output.println("##STOP##");
+    output.println(ProtocolStrings.STOP);
   }
   
   public String receive()
   {
     String msg = input.nextLine();
-    if(msg.equals("##STOP##")){
+    if(msg.equals(ProtocolStrings.STOP)){
       try {
         socket.close();
       } catch (IOException ex) {
@@ -50,9 +51,15 @@ public class EchoClient
   
   public static void main(String[] args)
   {   
+    int port = 9090;
+    String ip = "localhost";
+    if(args.length == 2){
+      port = Integer.parseInt(args[0]);
+      ip = args[1];
+    }
     try {
       EchoClient tester = new EchoClient();      
-      tester.connect("localhost", 9090);
+      tester.connect(ip, port);
       System.out.println("Sending 'Hello world'");
       tester.send("Hello World");
       System.out.println("Waiting for a reply");

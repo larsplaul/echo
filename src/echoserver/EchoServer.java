@@ -5,15 +5,19 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Properties;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import shared.ProtocolStrings;
+import utils.Utils;
 
 
 public class EchoServer {
 
   private static boolean keepRunning = true;
   private static ServerSocket serverSocket;
+  private static final Properties properties = Utils.initProperties("server.properties");
  
 
   public static void stopServer() {
@@ -26,19 +30,19 @@ public class EchoServer {
 
     String message = input.nextLine(); //IMPORTANT blocking call
     Logger.getLogger(EchoServer.class.getName()).log(Level.INFO, String.format("Received the message: %1$S ",message));
-    while (!message.equals("##STOP##")) {
+    while (!message.equals(ProtocolStrings.STOP)) {
       writer.println(message.toUpperCase());
       Logger.getLogger(EchoServer.class.getName()).log(Level.INFO, String.format("Received the message: %1$S ",message.toUpperCase()));
       message = input.nextLine(); //IMPORTANT blocking call
     }
-    writer.println("##STOP##");//Echo the stop message back to the client for a nice closedown
+    writer.println(ProtocolStrings.STOP);//Echo the stop message back to the client for a nice closedown
     socket.close();
     Logger.getLogger(EchoServer.class.getName()).log(Level.INFO, "Closed a Connection");
   }
 
   public static void main(String[] args) {
-    int port = 9090;
-    String ip = "localhost";
+    int port = Integer.parseInt(properties.getProperty("port"));
+    String ip = properties.getProperty("serverIp");
     Logger.getLogger(EchoServer.class.getName()).log(Level.INFO, "Sever started");
     try {
       serverSocket = new ServerSocket();
