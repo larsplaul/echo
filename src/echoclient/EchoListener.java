@@ -10,6 +10,6 @@ package echoclient;
  *
  * @author Lars Mortensen
  */
-public interface EchoListener {
+public interface EchoListener{
   void messageArrived(String message);
 }
