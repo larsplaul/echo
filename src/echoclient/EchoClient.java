@@ -27,6 +27,7 @@ public class EchoClient extends Thread {
     socket = new Socket(serverAddress, port);
     input = new Scanner(socket.getInputStream());
     output = new PrintWriter(socket.getOutputStream(), true);  //Set to true, to get auto flush behaviour
+    start();
   }
 
   public void send(String msg) {
@@ -45,9 +46,11 @@ public class EchoClient extends Thread {
     listeners.remove(l);
   }
 
+  @Override
   public void run()  {
     String msg = input.nextLine();
     while (!msg.equals(ProtocolStrings.STOP)) {
+      System.out.println(msg);
       notifyListeners(msg);
       msg = input.nextLine();
     }
@@ -77,7 +80,7 @@ public class EchoClient extends Thread {
     try {
       EchoClient tester = new EchoClient();
       tester.connect(ip, port);
-      tester.start();
+      
       tester.registerEchoListener(new EchoListener(){
         @Override
         public void messageArrived(String message) {
